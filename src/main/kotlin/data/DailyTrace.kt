@@ -36,7 +36,7 @@ data class DailyTrace(
     val timestamp: Instant,         // UTC
     @Contextual
     val dayBucket: LocalDate,       // 하루 경계 반영된 '소속 날짜'
-    val durationMinute: Int? = null,   // 체류/학습 시간(분)
+    val durationMinute: Int = 0,   // 체류/학습 시간(분)
 
     val origin: Origin,             // 원천 상세
     val status: Status = Status.CONFIRMED // hidden for the user
