@@ -52,13 +52,14 @@ class YamlFormatTest : StringSpec({
     "format should serialize a list of traces into a TraceReport YAML" {
         // --- 실행 ---
         val traceReport = TraceReport(inputTraceList)
-        val actualYaml = YamlFormater.format(traceReport)
+        val yamlFormatter = GenericYamlFormatter(TraceReport.serializer())
+        val actualYaml = yamlFormatter.format(traceReport)
         println("--- Generated YAML for format test ---\n$actualYaml")
 
         // --- 검증 ---
         // `generatedAt` 타임스탬프가 동적이므로, 고정된 문자열과 비교할 수 없습니다.
         // 대신, 생성된 YAML을 다시 객체로 파싱하여 그 구조와 내용이 올바른지 확인합니다.
-        val parsedReport = YamlFormater.parse(actualYaml)
+        val parsedReport = yamlFormatter.parse(actualYaml)
 
         // 메타데이터가 올바른지 확인합니다.
         parsedReport.totalCount shouldBe inputTraceList.size
@@ -119,9 +120,10 @@ class YamlFormatTest : StringSpec({
             generatedAt = Instant.parse("2025-08-31T12:00:00Z"),
             data = inputTraceList // `data` 부분은 위에서 정의한 inputTraceList와 동일합니다.
         )
+        val yamlFormatter = GenericYamlFormatter(TraceReport.serializer())
 
         // --- 실행 ---
-        val parsedReport = YamlFormater.parse(yamlToParse)
+        val parsedReport = yamlFormatter.parse(yamlToParse)
 
         // --- 검증 ---
         // 파싱된 객체가 기대하는 객체와 완전히 일치하는지 확인합니다.
