@@ -12,7 +12,10 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
 
-class YamlFormat {
+class YamlFormater: Formatter<String, TraceReport> {
+    override fun format(data: TraceReport): String = Companion.format(data)
+    override fun parse(data: String): TraceReport = Companion.parse(data)
+
     companion object {
         private val yaml: Yaml = Yaml(
             serializersModule = SerializersModule {
@@ -25,15 +28,9 @@ class YamlFormat {
 
             )
         )
-
-        fun format(data: List<DailyTrace>): String {
-            val report = TraceReport(
-                totalCount = data.size,
-                totalMinute = data.sumOf { it.durationMinute },
-                generatedAt = data.first().timestamp,
-                data = data)
+        fun format(data: TraceReport): String {
             return yaml.encodeToString(
-                TraceReport.serializer(), report)
+                TraceReport.serializer(), data)
         }
 
         fun parse(data: String): TraceReport {
