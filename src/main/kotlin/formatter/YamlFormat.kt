@@ -14,7 +14,6 @@ import kotlinx.serialization.modules.contextual
 
 class YamlFormater: Formatter<String, TraceReport> {
     override fun format(data: TraceReport): String = Companion.format(data)
-
     override fun parse(data: String): TraceReport = Companion.parse(data)
 
     companion object {
